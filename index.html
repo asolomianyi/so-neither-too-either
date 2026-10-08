@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтерактивний урок: So, Neither, Too, Either</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --success: #16a34a;
+            --error: #dc2626;
+            --tip-bg: #eff6ff;
+            --step-bg: #f8fafc;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 950px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4f46e5, #3b82f6);
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.7rem;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            opacity: 0.9;
+        }
+
+        .slide-content {
+            padding: 30px;
+            min-height: 420px;
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .slide-content.active {
+            display: flex;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-top: 0;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        p {
+            line-height: 1.6;
+            margin: 6px 0;
+        }
+
+        .explanation-box {
+            background: var(--tip-bg);
+            border-left: 5px solid var(--primary);
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .step-box {
+            background: var(--step-bg);
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+
+        .step-title {
+            font-weight: bold;
+            color: #0f172a;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge {
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 700px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .card h4 {
+            margin-top: 0;
+            color: #0f172a;
+        }
+
+        ul {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 4px;
+        }
+
+        .highlight {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .exercise-item {
+            margin-bottom: 16px;
+            background: #f8fafc;
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .exercise-item p {
+            margin: 0 0 8px 0;
+            font-weight: 500;
+        }
+
+        .tip-text {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        input[type="text"] {
+            padding: 6px 10px;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+            width: 150px;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary);
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 30px;
+            background: #f1f5f9;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .feedback {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-left: 10px;
+        }
+
+        .feedback.correct {
+            color: var(--success);
+        }
+
+        .feedback.incorrect {
+            color: var(--error);
+        }
+
+        .finish-screen {
+            text-align: center;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Самовчитель з англійської граматики</h1>
+        <p>Як створювати відповіді з So, Neither, Too, Either покроково</p>
+    </div>
+
+    <!-- Слайд 1: Теорія (Стверджувальні) -->
+    <div class="slide-content active" id="slide-1">
+        <div>
+            <h2>Крок 1. Базові правила (Стверджувальні думки)</h2>
+            <div class="explanation-box">
+                <p>Коли співрозмовник говорить щось у <b>стверджувальній</b> формі, ми можемо підтримати його двома способами:</p>
+            </div>
+            <div class="grid-2">
+                <div class="card">
+                    <h4>Спосіб із «So»</h4>
+                    <p><b>So + допоміжне дієслово + я/хтось</b></p>
+                    <ul>
+                        <li><b>А:</b> I want to go.</li>
+                        <li><b>В:</b> <span class="highlight">So do I.</span></li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>Спосіб із «Too»</h4>
+                    <p><b>Я/хтось + допоміжне дієслово + too</b></p>
+                    <ul>
+                        <li><b>А:</b> I want to go.</li>
+                        <li><b>В:</b> <span class="highlight">I do too.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div></div>
+    </div>
+
+    <!-- Слайд 2: Теорія (Заперечні) -->
+    <div class="slide-content" id="slide-2">
+        <div>
+            <h2>Крок 2. Базові правила (Заперечні думки)</h2>
+            <div class="explanation-box">
+                <p>Коли співрозмовник висловлює <b>заперечення</b> (негатив), ми погоджуємося за допомогою:</p>
+            </div>
+            <div class="grid-2">
+                <div class="card">
+                    <h4>Спосіб із «Neither»</h4>
+                    <p><b>Neither + допоміжне дієслово + я/хтось</b></p>
+                    <ul>
+                        <li><b>А:</b> I've never been there.</li>
+                        <li><b>В:</b> <span class="highlight">Neither have I.</span></li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>Спосіб із «Either»</h4>
+                    <p><b>Я/хтось + заперечне дієслово + either</b></p>
+                    <ul>
+                        <li><b>А:</b> I've never been there.</li>
+                        <li><b>В:</b> <span class="highlight">I haven't either.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div></div>
+    </div>
+
+    <!-- Слайд 3: ЯК ВИКОНУВАТИ (Алгоритм) -->
+    <div class="slide-content" id="slide-3">
+        <div>
+            <h2>Крок 3. Алгоритм: Як будувати відповідь?</h2>
+            <p>Щоб правильно утворити коротку відповідь, зробіть 3 простих кроки:</p>
+            
+            <div class="step-box">
+                <div class="step-title"><span class="badge">Крок 1</span> Визначте час та дієслово у першому реченні</div>
+                <p>Подивіться, яке допоміжне чи смислове дієслово використано в реченні співрозмовника (<i>play → do/does; has been → has; can → can; is → is</i>).</p>
+            </div>
+
+            <div class="step-box">
+                <div class="step-title"><span class="badge">Крок 2</span> Оберіть слово-зв'язку</div>
+                <p>Якщо перше речення стверджувальне — використовуйте <b>So</b> або <b>too</b>. Якщо заперечне (є слова <i>not, never, can't</i>) — використовуйте <b>Neither</b> або <b>either</b>.</p>
+            </div>
+
+            <div class="step-box">
+                <div class="step-title"><span class="badge">Крок 3</span> Зберіть структуру</div>
+                <p>Поставте допоміжне дієслово одразу після <i>So / Neither</i> або наприкінці з <i>too / either</i>.</p>
+            </div>
+        </div>
+        <div></div>
+    </div>
+
+    <!-- Слайд 4: Розбір прикладів -->
+    <div class="slide-content" id="slide-4">
+        <div>
+            <h2>Крок 4. Детальний розбір вправ</h2>
+            
+            <div class="step-box">
+                <div class="step-title">Приклад 1: <span style="color:#2563eb; font-weight:normal;">I play the guitar...</span></div>
+                <p><b>Аналіз:</b> Речення у Present Simple (дієслово <i>play</i> у формі теперішнього часу без зірочок чи закінчень для I). Для займенника *I* питальним/допоміжним є <b>do</b>. Оскільки речення стверджувальне, пишемо: <span class="highlight">So do I</span> або <span class="highlight">I do too</span>.</p>
+            </div>
+
+            <div class="step-box">
+                <div class="step-title">Приклад 2: <span style="color:#2563eb; font-weight:normal;">Wayne never goes...</span></div>
+                <p><b>Аналіз:</b> Слово <b>never</b> автоматично робить речення заперечним. Час — Present Simple (дієслово з закінченням -s: *goes*). Для третьої особи однини (*Wayne / Donna*) допоміжне дієслово — <b>does</b>. Оскільки це заперечення, використовуємо *neither*: <span class="highlight">Neither does Donna</span>.</p>
+            </div>
+        </div>
+        <div></div>
+    </div>
+
+    <!-- Слайд 5: Тренування 1-2 -->
+    <div class="slide-content" id="slide-5">
+        <div>
+            <h2>Крок 5. Практика (Завдання 1-2)</h2>
+            <p>Застосуйте алгоритм та заповніть пропуски:</p>
+            
+            <div class="exercise-item" data-answer="do i">
+                <p>1. <b>A:</b> I play the guitar in a band.<br><b>B:</b> I <input type="text" placeholder="введіть відповідь">.</p>
+                <div class="tip-text">Підказка (структура з too): Попереднє дієслово play -> допоміжне do. Вийде: do i</div>
+                <span class="feedback"></span>
+            </div>
+
+            <div class="exercise-item" data-answer="neither has">
+                <p>2. <b>A:</b> My brother has been to New York.<br><b>B:</b> <input type="text" placeholder="введіть відповідь"> mine.</p>
+                <div class="tip-text">Підказка: Шукаємо допоміжне дієслово з першої репліки (has). Додаємо neither на початок. Вийде: neither has</div>
+                <span class="feedback"></span>
+            </div>
+        </div>
+        <button class="btn" onclick="checkSlide(5)">Перевірити відповіді</button>
+    </div>
+
+    <!-- Слайд 6: Тренування 3-4 -->
+    <div class="slide-content" id="slide-6">
+        <div>
+            <h2>Крок 5. Практика (Завдання 3-4)</h2>
+            <p>Продовжуємо практикуватись із запереченнями:</p>
+            
+            <div class="exercise-item" data-answer="does donna">
+                <p>3. <b>A:</b> Wayne never goes to the theatre.<br><b>B:</b> Donna <input type="text" placeholder="введіть відповідь">.</p>
+                <div class="tip-text">Підказка: "never" дає заперечення. Дієслово *goes* вимагає допоміжного *does*. Вийде: does donna (або Neither does Donna, залежно від формату, тут: does)</div>
+                <span class="feedback"></span>
+            </div>
+
+            <div class="exercise-item" data-answer="neither can">
+                <p>4. <b>A:</b> I can't see anything from here.<br><b>B:</b> <input type="text" placeholder="введіть відповідь"> I.</p>
+                <div class="tip-text">Підказка: Є модальне дієслово can't (заперечення). Використовуємо Neither. Вийде: neither can</div>
+                <span class="feedback"></span>
+            </div>
+        </div>
+        <button class="btn" onclick="checkSlide(6)">Перевірити відповіді</button>
+    </div>
+
+    <!-- Слайд 7: Фінал -->
+    <div class="slide-content" id="slide-7">
+        <div class="finish-screen">
+            <h2>Чудова робота! 🎉</h2>
+            <p>Тепер ви знаєте не лише правила, а й чіткий алгоритм того, як утворювати відповіді з <b>so, neither, too, either</b>.</p>
+            <br>
+            <button class="btn" onclick="restartLesson()">Пройти урок спочатку</button>
+        </div>
+        <div></div>
+    </div>
+
+    <!-- Навігація -->
+    <div class="nav-buttons">
+        <button class="btn" id="prevBtn" onclick="changeSlide(-1)" style="display: none;">Назад</button>
+        <div id="slideCounter" style="align-self: center; font-weight: 600;">Крок 1 з 7</div>
+        <button class="btn" id="nextBtn" onclick="changeSlide(1)">Далі</button>
+    </div>
+</div>
+
+<script>
+    let currentSlide = 1;
+    const totalSlides = 7;
+
+    function showSlide(slideNum) {
+        document.querySelectorAll('.slide-content').forEach(slide => {
+            slide.classList.remove('active');
+        });
+        document.getElementById(`slide-${slideNum}`).classList.add('active');
+
+        document.getElementById('prevBtn').style.display = slideNum === 1 ? 'none' : 'block';
+        document.getElementById('nextBtn').style.display = slideNum === totalSlides ? 'none' : 'block';
+        document.getElementById('slideCounter').innerText = `Крок ${slideNum} з ${totalSlides}`;
+    }
+
+    function changeSlide(direction) {
+        currentSlide += direction;
+        if (currentSlide < 1) currentSlide = 1;
+        if (currentSlide > totalSlides) currentSlide = totalSlides;
+        showSlide(currentSlide);
+    }
+
+    function checkSlide(slideNum) {
+        const slide = document.getElementById(`slide-${slideNum}`);
+        const items = slide.querySelectorAll('.exercise-item');
+        
+        items.forEach(item => {
+            const input = item.querySelector('input');
+            const feedback = item.querySelector('.feedback');
+            const userAns = input.value.trim().toLowerCase().replace(/\s+/g, ' ');
+            const correctAns = item.getAttribute('data-answer');
+
+            if (userAns === correctAns) {
+                feedback.textContent = '✓ Правильно!';
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.textContent = `✗ Правильна відповідь: ${item.getAttribute('data-answer')}`;
+                feedback.className = 'feedback incorrect';
+            }
+        });
+    }
+
+    function restartLesson() {
+        currentSlide = 1;
+        document.querySelectorAll('input').forEach(input => input.value = '');
+        document.querySelectorAll('.feedback').forEach(f => f.textContent = '');
+        showSlide(currentSlide);
+    }
+</script>
+
+</body>
+</html>
